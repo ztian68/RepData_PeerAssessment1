@@ -17,9 +17,10 @@ stepsum <-aggregate(data$steps, by=list(data$date), sum)
 print(stepsum)
 hist(stepsum$x, xlab="total number of steps taken per day", main="Histogram of total number of steps taken per day")
 summary<-summary(stepsum$x)
+print("Summary of total number steps taken per day")
+summary
 ```
-Summary of total number steps taken per day
-`r summary`
+
 
 
 The average daily activity pattern
@@ -31,7 +32,7 @@ plot(stepmeanI$Group.1, stepmeanI$x, type="l",main="the average daily activity p
 maxindex<-which.max(stepmeanI$x)
 interval<-stepmeanI[maxindex,"Group.1"]
 ```
-The 5 minutes interval which contains the maximum number osf steps is `r interva'`.
+The 5 minutes interval which contains the maximum number osf steps is `r interval`.
 
 
 
@@ -54,13 +55,11 @@ newstepsum <-aggregate(newdata$steps, by=list(newdata$date), sum)
 print(newstepsum)
 hist(newstepsum$x, xlab="total number of steps taken per day in new dataset", main="Histogram of total number of steps taken per day")
 newsummary<-summary(newstepsum$x)
+print("Summary of total number steps taken per day with filling the missing value")
+newsummary
+print("Summary of total number steps taken per day with filling the missing value")
+summary
 ```
-Summary of total number steps taken per day with filling the missing value
-`r newsummary`
-
-Summary of total number steps taken per day with filling the missing value
-`r summary`
-
 The impact of total number steps taken perday by filling the missing value is that the median value is increased, Mean value remains the same, the distribution of total number steps taken perday is more balanced.
 
 
@@ -76,5 +75,12 @@ weekdayend <- function (x)
          return(newdata)
   }
  newdata<-weekdayend(newdata$weekdays)
-newstepmeanI2 <-aggregate(newdata$steps, by=list(newdata$interval), mean)
+ newdataweekday <- newdata[newdata$wde=="weekday",]
+ newdataweekend <- newdata[newdata$wde=="weekend",]
+ stepmeanweekend <- aggregate(newdataweekend$steps, by=list(newdataweekend$interval), mean)
+stepmeanweekday <- aggregate(newdataweekday$steps, by=list(newdataweekday$interval), mean)
+par(mfrow=c(2,1))
+plot(stepmeanweekend$Group.1, stepmeanweekend$x, type="l",main="weekend", xlab="the 5 minute interval", ylab="the average of steps taken")
+plot(stepmeanweekday$Group.1, stepmeanweekday$x, type="l",main="weekday", xlab="the 5 minute interval", ylab="the average of steps taken")
+```
 
